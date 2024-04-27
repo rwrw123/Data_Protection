@@ -1,9 +1,15 @@
 import socket
 import threading
 import json
+import re
+
+#Remove srip excess whitespace and potential harmful characters
+def sanitize_input(input_str):
+    return re.sub(r'[<>{}]', '', input-str.strip())
 
 def send_message(s, message):
     try:
+        sanitized_message = {key: sanitize_input(value) if isinstance(value, str) else value for key, value in message.items()}
         s.sendall(json.dumps(message).encode('utf-8'))
     except Exception as e:
         print(f"Failed to send message: {e}")
