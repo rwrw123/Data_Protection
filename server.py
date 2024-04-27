@@ -2,9 +2,14 @@ import socket
 import threading
 import json
 import queue
+import re
 
 # This queue will hold tuples of (connection object, address, message)
 inquiry_queue = queue.Queue()
+
+#Remove strip excess whitespace and potential harmful characters
+def sanitize_input(input_str):
+    return re.sub(r'[<>{}]', '',input_str.strip())
 
 def handle_client(conn, addr, inquiry_queue):
     """Handles incoming client connections."""
@@ -15,14 +20,14 @@ def handle_client(conn, addr, inquiry_queue):
             if not data:
                 break
             message = json.loads(data.decode('utf-8'))
+            sanitized_message = {key: sanitize_input(value) if isinstance(value, str) else value for key, value in message.items()}
+            # Print santized messages conditionally, skip printing for inquiries
+            if sanitized_message['type'] != 'inquiry':
+                print(f"Received message from {addr}: {sanitized_message['content']}")
 
-            # Print messages conditionally, skip printing for inquiries
-            if message['type'] != 'inquiry':
-                print(f"Received message from {addr}: {message['content']}")
-
-            if message['type'] == 'inquiry':
+            if sanitized_message['type'] == 'inquiry':
                 # Handle inquiries by adding them to the queue
-                inquiry_queue.put((conn, addr, message))
+                inquiry_queue.put((conn, addr, sanitized_message))
         except Exception as e:
             print(f"Error handling message from {addr}: {e}")
             break
