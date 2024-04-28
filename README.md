@@ -24,3 +24,20 @@
     - time must follow the ISO 8601 date-time format
     - Purpose:
         Ensures that appointments are scheduled with correct and valid data, enhancing the reliability of the scheduling system.
+### Changes in app.py
+- User Registration
+  - Endpoint: POST /users/add
+  - Enhancements:
+    - Email, name, and password fields are validated for format and content.
+    - Passwords are securely hashed using bcrypt before storage to ensure data security.
+    - Provides detailed error messages for invalid inputs to assist in troubleshooting and user guidance.
+- Role Assignment
+  - Endpoint: POST /users/<user_id>/assignRole
+  - Enhancements:
+    - Role updates are checked against a list of valid roles to prevent unauthorized role assignments.
+    - Secure updates to user roles using MongoDB transactions to ensure database integrity.
+- Device Registration
+  - Endpoint: POST /devices/register
+  - Enhancements:
+      - Device IDs and types are strictly validated using regular expressions and predefined lists to ensure they meet system requirements.
+      - Securely stores device information with validation feedback on incorrect inputs.
