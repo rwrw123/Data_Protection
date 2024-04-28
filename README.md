@@ -41,3 +41,5 @@
   - Enhancements:
       - Device IDs and types are strictly validated using regular expressions and predefined lists to ensure they meet system requirements.
       - Securely stores device information with validation feedback on incorrect inputs.
+
+## P2P Project
