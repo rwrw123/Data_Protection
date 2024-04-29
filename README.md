@@ -43,3 +43,28 @@
       - Securely stores device information with validation feedback on incorrect inputs.
 
 ## P2P Project
+### Changes in client.py
+- Function: sanitize_input(input_str)
+- Purpose:
+    - This function sanitizes user input by removing potentially harmful characters that could be used in injection attacks.
+- Methodology:
+    - It uses a regular expression to filter out any occurrences of <, >, {, or }.
+    - These characters are often used in scripting and markup languages to denote special syntax, so stripping them from input can prevent certain types of injection attacks, such as HTML or JavaScript injection.
+- Usage in Client Script:
+    - Applied to each piece of user input that forms part of the message data structure before it is serialized into JSON and sent over the network.
+    - Ensures that the data sent from the client to the server is devoid of characters that could be used maliciously.
+- Usage
+  <img width="948" alt="Screen Shot 2024-04-28 at 9 11 20 PM" src="https://github.com/rwrw123/Data_Protection/assets/113308286/8e39bc19-9c7f-487f-b288-1359ef90d9d9">
+
+### Changes in server.py
+- Application:
+    - The server uses the sanitization function on all incoming data before processing it.
+    - This is a defensive programming practice to ensure that even if the client fails to properly sanitize data, the server provides an additional layer of security.
+- Process Flow:
+  - Data received over the network is first decoded and deserialized from JSON.
+  - Each message, particularly its content, is sanitized using the sanitize_input function.
+  - The sanitized content is then used in further server-side processing or stored, reducing the risk of harmful data being executed or stored.
+- Usage
+  <img width="995" alt="Screen Shot 2024-04-28 at 9 12 38 PM" src="https://github.com/rwrw123/Data_Protection/assets/113308286/097692e7-c669-49b8-9ffb-e897db3a513e">
+
+
